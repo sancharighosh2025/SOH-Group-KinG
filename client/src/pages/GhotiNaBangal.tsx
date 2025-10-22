@@ -330,7 +330,7 @@ export default function GhotiNaBangal() {
             <div className="relative">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <video 
-                  src="./Ghoti/From KlickPin CF Geetanjali_Photos on Instagram Capturing Culinary Moments Where Every Frame Tells a Delicious Story 📸🍔 foodielens gourmetgallery epicureancapture in… [Video] [Video] _ Restaurant social media Ads.mp4"
+                  src="./Ghoti/Ghoti-video.mp4"
                   className="w-full h-[400px] object-cover"
                   poster="/ghoti/about-1-poster.jpg" 
                   autoPlay 

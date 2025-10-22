@@ -262,7 +262,7 @@ export default function HomePage() {
     {
       name: "Orchid Gallery",
       to: "orchid-gallery",
-      video: "/From KlickPin CF Karina Studio _ Exclusive wedding photography Dubai _ GCC on Instagram Inspiration and ideas for our brides 🌿 Covered by @karinastudioae [Video] [Video] in 2025 _ Wedding engagement pictures Weddi.mp4",
+      video: "/video3.mp4",
       poster: "/best/orchid-gallery-poster.jpg",
       logo: "/Logo/Logo-Orchid.png",
       subtitle: "Seamless planning and premium styling",
@@ -270,7 +270,7 @@ export default function HomePage() {
     {
       name: "Ar ChitraKola",
       to: "ar-chitrakola",
-      video: "/From KlickPin CF Arbes photography on Instagram Perfume product photography by @arbesphoto Perfume @decavaae wwwaliarbesscom _ Perfume photography Creative advertising photography Fire photography.mp4",
+      video: "/video1.mp4",
       poster: "/best/ar-chitrakola-poster.jpg",
       logo: "/Logo/Logo-AR2.png",
       subtitle: "Photography and creative direction",
@@ -278,7 +278,7 @@ export default function HomePage() {
     {
       name: "Ghoti na Bangal",
       to: "ghoti-na-bangal",
-      video: "/From KlickPin CF EV Albany em 2025 _ Gastronomia Trufa Restaurante.mp4",
+      video: "video2.mp4",
       poster: "/best/ghoti-na-bangal-poster.jpg",
       logo: "/Logo/Logo-Ghoti.png",
       subtitle: "Heritage Bengali catering and decor",

@@ -339,7 +339,7 @@ export default function MadeMyDay() {
             <div className="relative">
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <video 
-                  src=".\MadeMyDay\From KlickPin CF Priyanshu _ Illustrator on Instagram ✨ Purvi & Aayesh ✨ From the vibrant heart of Delhi to the serene hills of Ooty this printed invite tells a story beyond … [Video] [Video] in 2025 _ Unique weddi.mp4"
+                  src=".\MadeMyDay\Made-video.mp4"
                   className="w-full h-[400px] object-cover"
                   poster="/ghoti/about-1-poster.jpg" 
                   autoPlay 
