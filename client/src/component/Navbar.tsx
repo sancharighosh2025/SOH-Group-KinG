@@ -1,8 +1,9 @@
 import React from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { Menu, X, Star, ShoppingCart } from "lucide-react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X, Star, ShoppingCart, User, LogOut, UserCircle } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const routeToLogo: Record<string, string> = {
   "/": "/Logo/Logo-SOH.png", // temporary placeholder; replace with provided assets later
@@ -24,13 +25,17 @@ const routeToTitle: Record<string, string> = {
 
 export default function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { state } = useCart();
+  const { state: authState, logout } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = React.useState(false);
 
   React.useEffect(() => {
     // close dropdown on route change
     setOpen(false);
+    setShowProfileDropdown(false);
   }, [location.pathname]);
 
   React.useEffect(() => {
@@ -39,6 +44,23 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (showProfileDropdown && !target.closest('[data-profile-dropdown]')) {
+        setShowProfileDropdown(false);
+      }
+    };
+
+    if (showProfileDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showProfileDropdown]);
 
   const currentLogo = routeToLogo[location.pathname] ?? routeToLogo["/"];
   const currentTitle = routeToTitle[location.pathname] ?? routeToTitle["/"];
@@ -123,6 +145,53 @@ export default function Navbar() {
                   </Link>
                 )}
                 
+                {authState.isAuthenticated ? (
+                  <div className="relative" data-profile-dropdown>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                      className="border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-semibold transition-all duration-300"
+                    >
+                      <UserCircle className="w-4 h-4 mr-2" />
+                      {authState.user?.name || 'Profile'}
+                    </Button>
+                    
+                    {showProfileDropdown && (
+                      <div className="absolute right-0 top-full mt-2 w-48 bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200/50 py-2 z-50">
+                        <div className="px-4 py-2 border-b border-slate-200/50">
+                          <p className="text-sm font-medium text-slate-900">{authState.user?.name}</p>
+                          <p className="text-xs text-slate-500">{authState.user?.email}</p>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log('Logout clicked'); // Debug log
+                            logout();
+                            setShowProfileDropdown(false);
+                            navigate('/');
+                          }}
+                          className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 transition-colors duration-300 flex items-center"
+                        >
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link to="/login">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-semibold transition-all duration-300"
+                    >
+                      <User className="w-4 h-4 mr-2" />
+                      Login
+                    </Button>
+                  </Link>
+                )}
               </div>
 
               <Button
@@ -172,9 +241,38 @@ export default function Navbar() {
                       </Button>
                     </Link>
                   )}
-                  <Button size="sm" className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold">
-                    Get Quote
-                  </Button>
+                  
+                  {authState.isAuthenticated ? (
+                    <div className="space-y-2">
+                      <div className="px-4 py-2 bg-slate-50 rounded-lg">
+                        <p className="text-sm font-medium text-slate-900">{authState.user?.name}</p>
+                        <p className="text-xs text-slate-500">{authState.user?.email}</p>
+                      </div>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          console.log('Mobile logout clicked'); // Debug log
+                          logout();
+                          setOpen(false);
+                          navigate('/');
+                        }}
+                        className="w-full border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-semibold"
+                      >
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Logout
+                      </Button>
+                    </div>
+                  ) : (
+                    <Link to="/login" className="block">
+                      <Button size="sm" variant="outline" className="w-full border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-semibold">
+                        <User className="w-4 h-4 mr-2" />
+                        Login
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

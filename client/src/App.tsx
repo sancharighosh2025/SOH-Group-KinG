@@ -12,6 +12,7 @@ import Cart from "./pages/Cart";
 import About from "./pages/About";
 import { CartProvider } from "./contexts/CartContext";
 import { ToastProvider } from "./contexts/ToastContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 // Service pages
 import DecorationServices from "./pages/services/DecorationServices";
@@ -28,12 +29,14 @@ import LiveSketching from "./pages/services/LiveSketching";
 // If these two live in components folder:
 import ServiceGallery from "./component/ServiceGallery";
 import DecorationDetail from "./component/DecorationDetail";
+import Login from "./component/Login";
 
 function App() {
   return (
     <ToastProvider>
-      <CartProvider>
-        <Router>
+      <AuthProvider>
+        <CartProvider>
+          <Router>
           <Routes>
             <Route element={<RootLayout />}>
           <Route index element={<HomePage />} />
@@ -46,6 +49,7 @@ function App() {
           <Route path="/category/:category" element={<CategoryPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
 
           {/* Service routes */}
           <Route path="/services/decoration" element={<DecorationServices />} />
@@ -68,7 +72,8 @@ function App() {
         </Route>
       </Routes>
     </Router>
-      </CartProvider>
+        </CartProvider>
+      </AuthProvider>
     </ToastProvider>
   );
 }
