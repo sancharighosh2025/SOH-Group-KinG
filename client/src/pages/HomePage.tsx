@@ -420,12 +420,12 @@ export default function HomePage() {
             </div>
             
             <div className="relative">
-              {/* Two overlapping images like the design */}
-              <div className="relative">
+              {/* Two overlapping images like the design - hidden on mobile */}
+              <div className="relative hidden md:block">
                 {/* Background Image - Conference/Corporate Event */}
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                   <div className="aspect-[4/3] bg-center bg-cover" 
-                       style={{ backgroundImage: "url('/home/about2.jpeg')" }}>
+                       style={{ backgroundImage: "url('/home/about2.jpg')" }}>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                   </div>
                 </div>
@@ -439,6 +439,16 @@ export default function HomePage() {
                   
                   {/* Light blue border effect */}
                   <div className="absolute inset-0 rounded-2xl border-2 border-blue-200/50" />
+                </div>
+              </div>
+              
+              {/* Single image for mobile */}
+              <div className="relative md:hidden">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                  <div className="aspect-[4/3] bg-center bg-cover" 
+                       style={{ backgroundImage: "url('/home/about2.jpg')" }}>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -518,35 +528,35 @@ export default function HomePage() {
                   {/* Slide Images */}
                   <div 
                     className="live-art-slide absolute inset-0 w-full h-full bg-center bg-cover"
-                    style={{ backgroundImage: "url('/AR/imageAR1.jpg')" }}
+                    style={{ backgroundImage: "url('/home/live/live-picture(1).jpg')" }}
                   />
                   <div 
                     className="live-art-slide absolute inset-0 w-full h-full bg-center bg-cover"
-                    style={{ backgroundImage: "url('/AR/imageAR2.jpg')" }}
+                    style={{ backgroundImage: "url('/home/live/live-picture(2).jpg')" }}
                   />
                   <div 
                     className="live-art-slide absolute inset-0 w-full h-full bg-center bg-cover"
-                    style={{ backgroundImage: "url('/AR/imageAR3.heic')" }}
+                    style={{ backgroundImage: "url('/home/live/live-picture(3).jpg')" }}
                   />
                   <div 
                     className="live-art-slide absolute inset-0 w-full h-full bg-center bg-cover"
-                    style={{ backgroundImage: "url('/AR/imageAR4.jpg')" }}
+                    style={{ backgroundImage: "url('/home/live/live-picture(4).jpg')" }}
                   />
                   <div 
                     className="live-art-slide absolute inset-0 w-full h-full bg-center bg-cover"
-                    style={{ backgroundImage: "url('/AR/imageAR5.heic')" }}
+                    style={{ backgroundImage: "url('/home/live/live-picture(1).jpg')" }}
                   />
                   <div 
                     className="live-art-slide absolute inset-0 w-full h-full bg-center bg-cover"
-                    style={{ backgroundImage: "url('/AR/imageAR6.jpg')" }}
+                    style={{ backgroundImage: "url('/home/live/live-picture(2).jpg')" }}
                   />
                   <div 
                     className="live-art-slide absolute inset-0 w-full h-full bg-center bg-cover"
-                    style={{ backgroundImage: "url('/AR/imageAR7.jpg')" }}
+                    style={{ backgroundImage: "url('/home/live/live-picture(3).jpg')" }}
                   />
                   <div 
                     className="live-art-slide absolute inset-0 w-full h-full bg-center bg-cover"
-                    style={{ backgroundImage: "url('/AR/imageAR8.jpg')" }}
+                    style={{ backgroundImage: "url('/home/live/live-picture(4).jpg')" }}
                   />
                 </div>
                 

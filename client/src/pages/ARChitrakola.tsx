@@ -70,8 +70,6 @@ export default function OrchidGallery() {
     if (!heroRef.current) return
     const ctx = gsap.context(() => {
       const tl = gsap.timeline()
-      
-      // Animate badge first
       tl.from('[data-hero-badge]', { 
         y: 20, 
         opacity: 0, 
@@ -79,32 +77,24 @@ export default function OrchidGallery() {
         duration: 0.8, 
         ease: 'back.out(1.7)' 
       })
-      
-      // Animate title with split text effect
       .from('[data-hero-title]', { 
         y: 60, 
         opacity: 0, 
         duration: 1.2, 
         ease: 'power3.out' 
       }, '-=0.4')
-      
-      // Animate subtitle
       .from('[data-hero-sub]', { 
         y: 30, 
         opacity: 0, 
         duration: 0.8, 
         ease: 'power2.out' 
       }, '-=0.6')
-      
-      // Animate CTA buttons
       .from('[data-hero-cta]', { 
         y: 20, 
         opacity: 0, 
         duration: 0.6, 
         ease: 'power2.out' 
       }, '-=0.4')
-      
-      // Animate stats with stagger
       .from('[data-hero-stats] > div', { 
         y: 20, 
         opacity: 0, 
@@ -112,8 +102,6 @@ export default function OrchidGallery() {
         duration: 0.6, 
         ease: 'power2.out' 
       }, '-=0.3')
-      
-      // Add a subtle floating animation to the title
       .to('[data-hero-title]', {
         y: -5,
         duration: 2,
@@ -157,7 +145,6 @@ export default function OrchidGallery() {
         return
       }
       el.scrollLeft += speedRef.current
-      // If we reach half of duplicated content, reset to start seamlessly
       const maxScroll = el.scrollWidth / 2
       if (el.scrollLeft >= maxScroll) {
         el.scrollLeft = 0
@@ -192,7 +179,6 @@ export default function OrchidGallery() {
         return
       }
       el.scrollLeft -= speedRef.current
-      // If we reach the beginning, reset to end seamlessly
       if (el.scrollLeft <= 0) {
         el.scrollLeft = el.scrollWidth / 2
       }
@@ -212,7 +198,6 @@ export default function OrchidGallery() {
       if (rafIdRef2.current) cancelAnimationFrame(rafIdRef2.current)
     }
   }, [])
-
 
   // LayoutGrid content for AR Chitrakola
   const SkeletonOne = () => (
@@ -280,15 +265,25 @@ export default function OrchidGallery() {
     </div>
   )
 
-  const cards = [
-    { id: 1, content: <SkeletonOne />, className: 'md:col-span-2', thumbnail: 'AR/imageAR13.jpg' },
-    { id: 2, content: <SkeletonTwo />, className: 'col-span-1', thumbnail: 'AR/imageAR13.jpg' },
-    { id: 3, content: <SkeletonThree />, className: 'col-span-1', thumbnail: 'AR/imageAR13.jpg' },
-    { id: 4, content: <SkeletonFour />, className: 'md:col-span-2', thumbnail: 'AR/imageAR13.jpg' },
-    { id: 5, content: <SkeletonFive />, className: 'col-span-1', thumbnail: 'AR/imageAR13.jpg' },
+  const cardsTop = [
+    { id: 1, content: <SkeletonOne />, className: 'md:col-span-2', thumbnail: 'AR/imageAR26.jpg' },
+    { id: 2, content: <SkeletonTwo />, className: 'col-span-1', thumbnail: 'AR/imageAR24.jpg' },
+    { id: 3, content: <SkeletonThree />, className: 'col-span-1', thumbnail: 'AR/imageAR(36).webp' },
+    { id: 4, content: <SkeletonFour />, className: 'md:col-span-2', thumbnail: 'AR/imageAR30.jpg' },
+    { id: 5, content: <SkeletonFive />, className: 'col-span-1', thumbnail: 'AR/imageAR28.jpg' },
     { id: 6, content: <SkeletonSix />, className: 'col-span-1', thumbnail: 'AR/imageAR14.jpg' },
-    { id: 7, content: <SkeletonSeven />, className: 'md:col-span-2', thumbnail: 'AR/imageAR13.jpg' },
-    { id: 8, content: <SkeletonEight />, className: 'col-span-1', thumbnail: 'AR/imageAR13.jpg' },
+    { id: 7, content: <SkeletonSeven />, className: 'md:col-span-2', thumbnail: 'AR/imageAR29.jpg' },
+    { id: 8, content: <SkeletonEight />, className: 'col-span-1', thumbnail: 'AR/imageAR(35).webp' },
+  ]
+  const cardsBottom = [
+    { id: 1, content: <SkeletonOne />, className: 'md:col-span-2', thumbnail: 'AR/imageAR26.jpg' },
+    { id: 2, content: <SkeletonTwo />, className: 'col-span-1', thumbnail: 'AR/imageAR24.jpg' },
+    { id: 3, content: <SkeletonThree />, className: 'col-span-1', thumbnail: 'AR/imageAR(36).webp' },
+    { id: 4, content: <SkeletonFour />, className: 'md:col-span-2', thumbnail: 'AR/imageAR30.jpg' },
+    { id: 5, content: <SkeletonFive />, className: 'col-span-1', thumbnail: 'AR/imageAR28.jpg' },
+    { id: 6, content: <SkeletonSix />, className: 'col-span-1', thumbnail: 'AR/imageAR14.jpg' },
+    { id: 7, content: <SkeletonSeven />, className: 'md:col-span-2', thumbnail: 'AR/imageAR29.jpg' },
+    { id: 8, content: <SkeletonEight />, className: 'col-span-1', thumbnail: 'AR/imageAR(35).webp' },
   ]
 
   return (
@@ -300,62 +295,57 @@ export default function OrchidGallery() {
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
+        /* Cross-browser hide scrollbar while keeping scroll */
+        .no-scrollbar::-webkit-scrollbar { display: none; height: 0; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* Hero Section */}
       <section ref={heroRef} className="relative w-full min-h-[100vh] flex items-center">
-        {/* Background Image */}
         <div className="absolute inset-0 bg-[url('/AR/hero.png')] bg-cover bg-center bg-no-repeat" />
         <div className="absolute inset-0 bg-black/40" />
         
-        {/* Content with Right Alignment */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
-            {/* Left Side - Empty or can add image/content later */}
-            <div className="hidden lg:block">
-              {/* Left side content can be added here if needed */}
-            </div>
-            
-            {/* Right Side - Text Content */}
-            <div className="text-right lg:text-right">
-              <div className="space-y-8">
-                <div className="space-y-6">
-                  <div data-hero-badge className="inline-flex items-center px-6 py-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm font-medium ml-auto">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[80vh]">
+            <div className="hidden lg:block" />
+            <div className="text-center lg:text-right">
+              <div className="space-y-6 lg:space-y-8">
+                <div className="space-y-4 lg:space-y-6">
+                  <div data-hero-badge className="inline-flex items-center px-4 lg:px-6 py-2 lg:py-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm font-medium mx-auto lg:ml-auto">
                     <Camera className="w-4 h-4 mr-2" />
                     Professional Photography
                   </div>
                   
-                  <h1 data-hero-title className="text-5xl lg:text-7xl font-heading font-bold leading-tight">
+                  <h1 data-hero-title className="text-4xl sm:text-5xl lg:text-7xl font-heading font-bold leading-tight">
                     <span className="block bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
                       AR Chitrakola
                     </span>
                   </h1>
                   
-                  <p data-hero-sub className="text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl ml-auto">
+                  <p data-hero-sub className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl mx-auto lg:ml-auto">
                     Bespoke photography and event styling crafted to tell authentic stories with warmth and artistry.
                     From intimate portraits to grand celebrations, we capture moments that last forever.
                   </p>
                 </div>
                 
-                <div data-hero-cta className="flex flex-col sm:flex-row gap-4 justify-end">
-                  <Button size="lg" className="bg-white hover:bg-white/90 text-slate-900 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                    Book Session <ArrowRight className="ml-2 h-5 w-5" />
+                <div data-hero-cta className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-end">
+                  <Button size="lg" className="bg-white hover:bg-white/90 text-slate-900 px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                    Book Session <ArrowRight className="ml-2 h-4 w-4 lg:h-5 lg:w-5" />
                   </Button>
                 </div>
 
-                {/* Stats */}
-                <div data-hero-stats className="grid grid-cols-3 gap-8 pt-12 border-t border-white/20 max-w-2xl ml-auto">
+                <div data-hero-stats className="grid grid-cols-3 gap-4 lg:gap-8 pt-8 lg:pt-12 border-t border-white/20 max-w-2xl mx-auto lg:ml-auto">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-white">7+</div>
-                    <div className="text-sm text-white/80">Years Experience</div>
+                    <div className="text-2xl lg:text-3xl font-bold text-white">7+</div>
+                    <div className="text-xs lg:text-sm text-white/80">Years Experience</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-white">500+</div>
-                    <div className="text-sm text-white/80">Happy Clients</div>
+                    <div className="text-2xl lg:text-3xl font-bold text-white">500+</div>
+                    <div className="text-xs lg:text-sm text-white/80">Happy Clients</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-white">800+</div>
-                    <div className="text-sm text-white/80">Photoshoots</div>
+                    <div className="text-2xl lg:text-3xl font-bold text-white">800+</div>
+                    <div className="text-xs lg:text-sm text-white/80">Photoshoots</div>
                   </div>
                 </div>
               </div>
@@ -365,40 +355,40 @@ export default function OrchidGallery() {
       </section>
 
       {/* About Section */}
-      <section ref={aboutRef} className="py-20 bg-slate-50">
+      <section ref={aboutRef} className="py-12 sm:py-16 lg:py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="space-y-6 lg:space-y-8 order-2 lg:order-1">
               <div className="space-y-4">
                 <div className="inline-flex items-center px-4 py-2 rounded-full bg-slate-100 text-slate-700 text-sm font-medium">
                   <Award className="w-4 h-4 mr-2" />
                   About AR Chitrakola
                 </div>
-                <h2 data-animate="heading" className="text-4xl lg:text-5xl font-heading font-bold text-slate-900">
+                <h2 data-animate="heading" className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-slate-900">
                   About AR Chitrakola
                 </h2>
-                <p className="text-xl text-slate-600 leading-relaxed">
+                <p className="text-lg sm:text-xl text-slate-600 leading-relaxed">
                   I am a photographer and visual storyteller, blending natural light with thoughtful composition to create timeless imagery. 
                   Sessions are collaborative, relaxed, and detail-focused for an effortless experience.
                 </p>
-                <p className="text-lg text-slate-600 leading-relaxed">
+                <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
                   From intimate portraits to editorial events, my approach harmonizes aesthetics with emotion so each frame feels personal and alive.
                 </p>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                  Book a Session <ArrowRight className="ml-2 h-5 w-5" />
+                <Button size="lg" className="bg-slate-900 hover:bg-slate-800 text-white px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                  Book a Session <ArrowRight className="ml-2 h-4 w-4 lg:h-5 lg:w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="border-2 border-slate-200 hover:border-slate-300 px-8 py-4 text-lg font-semibold rounded-xl">
+                <Button size="lg" variant="outline" className="border-2 border-slate-200 hover:border-slate-300 px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-semibold rounded-xl">
                   View Gallery
                 </Button>
               </div>
             </div>
             
-            <div className="relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <img src="/AR/AR-about.jpg" alt="About AR Chitrakola" className="w-full h-[500px] object-cover" />
+            <div className="relative order-1 lg:order-2">
+              <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl">
+                <img src="/AR/AR-about.jpg" alt="About AR Chitrakola" className="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               </div>
             </div>
@@ -407,43 +397,55 @@ export default function OrchidGallery() {
       </section>
 
       {/* Featured Work Section */}
-      <section id="featured" ref={featureRef} className="py-20 bg-white">
+      <section id="featured" ref={featureRef} className="py-12 sm:py-16 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-sm font-medium mb-6">
+          
+          <div className="text-center mb-12 lg:mb-16">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-sm font-medium mb-4 lg:mb-6">
               <Sparkles className="w-4 h-4 mr-2" />
               Our Portfolio
             </div>
-            <h3 data-animate="heading" className="text-4xl lg:text-6xl font-heading font-bold text-slate-900 mb-6">
+            <h3 data-animate="heading" className="text-3xl sm:text-4xl lg:text-6xl font-heading font-bold text-slate-900 mb-4 lg:mb-6">
               Our Best Work
             </h3>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto">
               Explore our curated collection of photography and event styling work that showcases our passion for storytelling.
             </p>
           </div>
 
-          <div className="h-[60vh] w-full">
-            <LayoutGrid cards={cards} />
+          {/* LayoutGrid BEFORE the strips - Hidden on mobile for better performance */}
+          <div className="hidden lg:block h-[60vh] w-full mb-140">
+            <LayoutGrid cards={cardsTop} />
+          </div>
+
+          {/* Mobile Gallery Grid - Show on mobile instead of LayoutGrid */}
+          <div className="lg:hidden grid grid-cols-2 gap-4 mb-12">
+            {ALL_PHOTOS.slice(0, 8).map((photo, idx) => (
+              <div
+                key={`mobile-${photo.id}-${idx}`}
+                className="group relative aspect-square overflow-hidden rounded-xl bg-white shadow-lg border border-slate-200"
+              >
+                <img 
+                  src={photo.src} 
+                  alt={photo.alt ?? 'Work'} 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            ))}
           </div>
 
           {/* Auto-scrolling Gallery Strip - Left to Right */}
-          <div className="space-y-9 mt-140 mb-10">
+          <div className="space-y-6 lg:space-y-9 mb-8 lg:mb-10">
             <div
               ref={stripRef1}
-              className="relative w-full overflow-x-auto whitespace-nowrap select-none"
-              style={{
-                scrollbarWidth: 'none' /* Firefox */,
-                msOverflowStyle: 'none' /* IE/Edge */,
-              }}
+              className="relative w-full overflow-x-auto whitespace-nowrap select-none no-scrollbar"
             >
-              <style>{`
-                .no-scrollbar::-webkit-scrollbar { display: none; height: 0; }
-              `}</style>
-              <div className="no-scrollbar flex gap-6 pr-6">
-                {STRIP_ITEMS_1.map((p) => (
+              <div className="flex gap-4 lg:gap-6 pr-4 lg:pr-6">
+                {STRIP_ITEMS_1.map((p, idx) => (
                   <figure
-                    key={p.id + '-ltr'}
-                    className="group relative shrink-0 w-[280px] sm:w-[320px] lg:w-[360px] h-[220px] sm:h-[240px] lg:h-[260px] overflow-hidden rounded-2xl bg-white shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300"
+                    key={`${p.id}-ltr-${idx}`}
+                    className="group relative shrink-0 w-[200px] sm:w-[240px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[160px] sm:h-[180px] md:h-[220px] lg:h-[240px] xl:h-[260px] overflow-hidden rounded-xl lg:rounded-2xl bg-white shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300"
                   >
                     <img src={p.src} alt={p.alt ?? 'Work'} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <figcaption className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -454,23 +456,16 @@ export default function OrchidGallery() {
           </div>
 
           {/* Auto-scrolling Gallery Strip - Right to Left */}
-          <div className="space-y-3">
+          <div className="space-y-3 mb-12 lg:mb-16">
             <div
               ref={stripRef2}
-              className="relative w-full overflow-x-auto whitespace-nowrap select-none"
-              style={{
-                scrollbarWidth: 'none' /* Firefox */,
-                msOverflowStyle: 'none' /* IE/Edge */,
-              }}
+              className="relative w-full overflow-x-auto whitespace-nowrap select-none no-scrollbar"
             >
-              <style>{`
-                .no-scrollbar::-webkit-scrollbar { display: none; height: 0; }
-              `}</style>
-              <div className="no-scrollbar flex gap-6 pr-6">
-                {STRIP_ITEMS_2.map((p) => (
+              <div className="flex gap-4 lg:gap-6 pr-4 lg:pr-6">
+                {STRIP_ITEMS_2.map((p, idx) => (
                   <figure
-                    key={p.id + '-rtl'}
-                    className="group relative shrink-0 w-[280px] sm:w-[320px] lg:w-[360px] h-[220px] sm:h-[240px] lg:h-[260px] overflow-hidden rounded-2xl bg-white shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300"
+                    key={`${p.id}-rtl-${idx}`}
+                    className="group relative shrink-0 w-[200px] sm:w-[240px] md:w-[280px] lg:w-[320px] xl:w-[360px] h-[160px] sm:h-[180px] md:h-[220px] lg:h-[240px] xl:h-[260px] overflow-hidden rounded-xl lg:rounded-2xl bg-white shadow-lg border border-slate-200 hover:shadow-xl transition-all duration-300"
                   >
                     <img src={p.src} alt={p.alt ?? 'Work'} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <figcaption className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -479,11 +474,12 @@ export default function OrchidGallery() {
               </div>
             </div>
           </div>
+
         </div>
       </section>
 
       {/* Testimonials */}
-      <AnimatedTestimonials testimonials={/* same array as above */[
+      <AnimatedTestimonials testimonials={[
         { quote: 'The attention to detail and innovative features have completely transformed our workflow. This is exactly what we have been looking for.', name: 'Sarah Chen', designation: 'Product Manager at TechFlow', src: 'test1.jpg' },
         { quote: 'Implementation was seamless and the results exceeded expectations. The platform’s flexibility is remarkable.', name: 'Michael Rodriguez', designation: 'CTO at InnovateSphere', src: 'test2.jpg' },
         { quote: 'This solution has significantly improved our team’s productivity. The intuitive interface makes complex tasks simple.', name: 'Emily Watson', designation: 'Operations Director at CloudScale', src: 'test3.jpg' },
@@ -492,25 +488,25 @@ export default function OrchidGallery() {
       ]} />
 
       {/* CTA */}
-      <section className="py-20 bg-slate-900">
+      <section className="py-12 sm:py-16 lg:py-20 bg-slate-900">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <div className="space-y-8">
+          <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4">
-              <h3 className="text-4xl lg:text-5xl font-heading font-bold text-white">
+              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white">
                 Ready to connect with us?
               </h3>
-              <p className="text-xl text-slate-300 leading-relaxed max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-slate-300 leading-relaxed max-w-2xl mx-auto">
                 You want to connect with us and explore how we can craft meaningful visuals and events together.
               </p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/about">
-                <Button size="lg" className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                  Connect us <ArrowRight className="ml-2 h-5 w-5" />
+                <Button size="lg" className="bg-amber-600 hover:bg-amber-700 text-white px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                  Connect us <ArrowRight className="ml-2 h-4 w-4 lg:h-5 lg:w-5" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="border-2 border-white text-slate-900 hover:bg-white hover:text-slate-900 px-8 py-4 text-lg font-semibold rounded-xl">
+              <Button size="lg" variant="outline" className="border-2 border-white text-slate-900 hover:bg-white hover:text-slate-900 px-6 lg:px-8 py-3 lg:py-4 text-base lg:text-lg font-semibold rounded-xl">
                 View Portfolio
               </Button>
             </div>

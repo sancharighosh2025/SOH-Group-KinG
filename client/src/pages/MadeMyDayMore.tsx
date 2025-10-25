@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Button } from "../components/ui/button"
 import { ArrowRight, Star, Heart, Sparkles, ArrowLeft, Gift, ShoppingCart } from "lucide-react"
 import { SmartCartButton } from '../components/SmartCartButton'
+import FixedCartButton from '../components/FixedCartButton'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -354,6 +355,9 @@ export default function MadeMyDayMore() {
           </div>
         </div>
       </section>
+
+      {/* Fixed Cart Button */}
+      <FixedCartButton />
     </div>
   )
 }

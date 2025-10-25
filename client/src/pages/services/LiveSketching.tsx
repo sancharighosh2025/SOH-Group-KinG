@@ -38,30 +38,15 @@ export default function LiveSketching() {
   }, [])
 
   const galleryImages = [
-    "/AR/imageAR1.jpg",
-    "/AR/imageAR2.jpg", 
-    "/AR/imageAR3.heic",
-    "/AR/imageAR4.jpg",
-    "/AR/imageAR5.heic",
-    "/AR/imageAR6.jpg",
-    "/AR/imageAR7.jpg",
-    "/AR/imageAR8.jpg",
-    "/AR/imageAR9.heic",
-    "/AR/imageAR10.jpg",
-    "/AR/imageAR11.jpg",
-    "/AR/imageAR12.heic",
-    "/AR/imageAR13.jpg",
-    "/AR/imageAR14.jpg",
-    "/AR/imageAR15.jpg",
-    "/AR/imageAR16.heic",
-    "/AR/imageAR17.jpg",
-    "/AR/imageAR18.jpg",
-    "/AR/imageAR19.jpg",
-    "/AR/imageAR20.heic",
-    "/AR/imageAR21.jpg",
-    "/AR/imageAR22.jpg",
-    "/AR/imageAR23.jpg",
-    "/AR/imageAR24.jpg"
+    "home/live/live-picture(1).jpg",
+    "home/live/live-picture(2).jpg", 
+    "home/live/live-picture(3).jpg",
+    "home/live/live-picture(4).jpg",
+    "home/live/live-picture(1).jpg",
+    "home/live/live-picture(2).jpg",
+    "home/live/live-picture(3).jpg",
+    "home/live/live-picture(4).jpg",
+    
   ]
 
   const services = [

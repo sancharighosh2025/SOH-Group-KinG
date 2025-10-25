@@ -4,6 +4,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Button } from "../components/ui/button"
 import { ArrowRight, Star, Award, Heart, Sparkles, ChevronLeft, ChevronRight, Gift, Crown, Palette } from "lucide-react"
+import FixedCartButton from '../components/FixedCartButton'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -584,6 +585,9 @@ export default function MadeMyDay() {
           </div>
         </div>
       </section>
+
+      {/* Fixed Cart Button */}
+      <FixedCartButton />
     </div>
   )
 }

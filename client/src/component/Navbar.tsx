@@ -1,8 +1,7 @@
 import React from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Star, ShoppingCart, User, LogOut, UserCircle } from "lucide-react";
+import { Menu, X, Star, User, LogOut, UserCircle } from "lucide-react";
 import { Button } from "../components/ui/button";
-import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
 
 const routeToLogo: Record<string, string> = {
@@ -26,7 +25,6 @@ const routeToTitle: Record<string, string> = {
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { state } = useCart();
   const { state: authState, logout } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
@@ -64,11 +62,6 @@ export default function Navbar() {
 
   const currentLogo = routeToLogo[location.pathname] ?? routeToLogo["/"];
   const currentTitle = routeToTitle[location.pathname] ?? routeToTitle["/"];
-  
-  // Check if current route is Made My Day related
-  const isMadeMyDayRoute = location.pathname.startsWith('/made-my-day') || 
-                          location.pathname.startsWith('/category/') || 
-                          location.pathname === '/cart';
 
   const linkBase = "px-3 py-2 text-sm font-medium transition-all duration-300 rounded-lg";
   const getLinkClass = ({ isActive }: { isActive: boolean }) => {
@@ -127,23 +120,6 @@ export default function Navbar() {
               </div>
 
               <div className="hidden lg:flex items-center gap-4">
-                {isMadeMyDayRoute && (
-                  <Link to="/cart" className="relative">
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      className="border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-semibold transition-all duration-300"
-                    >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      Cart
-                      {state.totalItems > 0 && (
-                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                          {state.totalItems}
-                        </span>
-                      )}
-                    </Button>
-                  </Link>
-                )}
                 
                 {authState.isAuthenticated ? (
                   <div className="relative" data-profile-dropdown>
@@ -208,45 +184,62 @@ export default function Navbar() {
 
           {open && (
             <div className="lg:hidden border-t border-slate-200/50 bg-white/95 backdrop-blur-md">
-              <div className="px-6 py-4 space-y-2">
-                <NavLink to="/" end className={getLinkClass}>
-                  Home
-                </NavLink>
-                <NavLink to="/ar-chitrakola" className={getLinkClass}>
-                  AR Chitrakola
-                </NavLink>
-                <NavLink to="/orchid-gallery" className={getLinkClass}>
-                  Orchid Gallery
-                </NavLink>
-                <NavLink to="/ghoti-na-bangal" className={getLinkClass}>
-                  Ghoti na Bangal
-                </NavLink>
-                <NavLink to="/made-my-day" className={getLinkClass}>
-                  Made My Moments
-                </NavLink>
-                <NavLink to="/about" className={getLinkClass}>
-                  About
-                </NavLink>
-                <div className="pt-4 space-y-3">
-                  {isMadeMyDayRoute && (
-                    <Link to="/cart" className="relative block">
-                      <Button size="sm" variant="outline" className="w-full border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-semibold">
-                        <ShoppingCart className="w-4 h-4 mr-2" />
-                        Cart
-                        {state.totalItems > 0 && (
-                          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                            {state.totalItems}
-                          </span>
-                        )}
-                      </Button>
-                    </Link>
-                  )}
+              <div className="px-4 sm:px-6 py-4">
+                {/* Navigation Links Column */}
+                <div className="flex flex-col space-y-1 mb-6">
+                  <NavLink 
+                    to="/" 
+                    end 
+                    className="block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 active:bg-slate-200"
+                    onClick={() => setOpen(false)}
+                  >
+                    Home
+                  </NavLink>
+                  <NavLink 
+                    to="/ar-chitrakola" 
+                    className="block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 active:bg-slate-200"
+                    onClick={() => setOpen(false)}
+                  >
+                    AR Chitrakola
+                  </NavLink>
+                  <NavLink 
+                    to="/orchid-gallery" 
+                    className="block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 active:bg-slate-200"
+                    onClick={() => setOpen(false)}
+                  >
+                    Orchid Gallery
+                  </NavLink>
+                  <NavLink 
+                    to="/ghoti-na-bangal" 
+                    className="block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 active:bg-slate-200"
+                    onClick={() => setOpen(false)}
+                  >
+                    Ghoti na Bangal
+                  </NavLink>
+                  <NavLink 
+                    to="/made-my-day" 
+                    className="block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 active:bg-slate-200"
+                    onClick={() => setOpen(false)}
+                  >
+                    Made My Moments
+                  </NavLink>
+                  <NavLink 
+                    to="/about" 
+                    className="block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg text-slate-700 hover:text-slate-900 hover:bg-slate-100 active:bg-slate-200"
+                    onClick={() => setOpen(false)}
+                  >
+                    About
+                  </NavLink>
+                </div>
+
+                {/* Action Buttons Section */}
+                <div className="border-t border-slate-200/50 pt-4 space-y-3">
                   
                   {authState.isAuthenticated ? (
-                    <div className="space-y-2">
-                      <div className="px-4 py-2 bg-slate-50 rounded-lg">
+                    <div className="space-y-3">
+                      <div className="px-4 py-3 bg-slate-50 rounded-lg border border-slate-200/50">
                         <p className="text-sm font-medium text-slate-900">{authState.user?.name}</p>
-                        <p className="text-xs text-slate-500">{authState.user?.email}</p>
+                        <p className="text-xs text-slate-500 mt-1">{authState.user?.email}</p>
                       </div>
                       <Button 
                         size="sm" 
@@ -259,15 +252,23 @@ export default function Navbar() {
                           setOpen(false);
                           navigate('/');
                         }}
-                        className="w-full border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-semibold"
+                        className="w-full border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-semibold transition-all duration-300"
                       >
                         <LogOut className="w-4 h-4 mr-2" />
                         Logout
                       </Button>
                     </div>
                   ) : (
-                    <Link to="/login" className="block">
-                      <Button size="sm" variant="outline" className="w-full border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-semibold">
+                    <Link 
+                      to="/login" 
+                      className="block"
+                      onClick={() => setOpen(false)}
+                    >
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="w-full border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-semibold transition-all duration-300"
+                      >
                         <User className="w-4 h-4 mr-2" />
                         Login
                       </Button>
