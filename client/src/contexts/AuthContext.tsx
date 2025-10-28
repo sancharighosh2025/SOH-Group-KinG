@@ -5,7 +5,8 @@ interface User {
   id: string;
   name: string;
   email: string;
-  phone: string;
+  mobile: number;
+  created_at: string;
 }
 
 interface AuthState {
@@ -22,7 +23,7 @@ type AuthAction =
 const AuthContext = createContext<{
   state: AuthState;
   login: (email: string, password: string) => Promise<boolean>;
-  signup: (name: string, email: string, phone: string, password: string) => Promise<boolean>;
+  signup: (name: string, email: string, mobile: number, password: string) => Promise<boolean>;
   logout: () => void;
 } | null>(null);
 
@@ -61,74 +62,121 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Check for existing session on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      try {
-        const user = JSON.parse(savedUser);
-        dispatch({ type: 'LOGIN', payload: user });
-      } catch (error) {
-        localStorage.removeItem('user');
+    const checkAuthStatus = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            dispatch({ type: 'LOGIN', payload: data.user });
+          } else {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+          }
+        } catch (error) {
+          console.error('Auth check failed:', error);
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
       }
-    } else {
       dispatch({ type: 'SET_LOADING', payload: false });
-    }
+    };
+
+    checkAuthStatus();
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     dispatch({ type: 'SET_LOADING', payload: true });
     
     try {
-      // Simulate API call - replace with actual authentication
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, accept any email/password combination
-      const user: User = {
-        id: '1',
-        name: 'Demo User',
-        email: email,
-        phone: '+1234567890',
-      };
-      
-      localStorage.setItem('user', JSON.stringify(user));
-      dispatch({ type: 'LOGIN', payload: user });
-      return true;
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        dispatch({ type: 'LOGIN', payload: data.user });
+        return true;
+      } else {
+        console.error('Login failed:', data.message);
+        dispatch({ type: 'SET_LOADING', payload: false });
+        return false;
+      }
     } catch (error) {
+      console.error('Login error:', error);
       dispatch({ type: 'SET_LOADING', payload: false });
       return false;
     }
   };
 
-  const signup = async (name: string, email: string, phone: string, password: string): Promise<boolean> => {
+  const signup = async (name: string, email: string, mobile: number, password: string): Promise<boolean> => {
     dispatch({ type: 'SET_LOADING', payload: true });
     
     try {
-      // Simulate API call - replace with actual registration
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const user: User = {
-        id: Date.now().toString(),
-        name: name,
-        email: email,
-        phone: phone,
-      };
-      
-      localStorage.setItem('user', JSON.stringify(user));
-      dispatch({ type: 'LOGIN', payload: user });
-      return true;
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, mobile, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        dispatch({ type: 'LOGIN', payload: data.user });
+        return true;
+      } else {
+        console.error('Signup failed:', data.message);
+        dispatch({ type: 'SET_LOADING', payload: false });
+        return false;
+      }
     } catch (error) {
+      console.error('Signup error:', error);
       dispatch({ type: 'SET_LOADING', payload: false });
       return false;
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     try {
+      // Call logout endpoint
+      const token = localStorage.getItem('token');
+      if (token) {
+        await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+      
+      localStorage.removeItem('token');
       localStorage.removeItem('user');
       dispatch({ type: 'LOGOUT' });
       console.log('Logout successful'); // Debug log
     } catch (error) {
       console.error('Logout error:', error);
-      // Still dispatch logout even if localStorage fails
+      // Still dispatch logout even if API call fails
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
       dispatch({ type: 'LOGOUT' });
     }
   };

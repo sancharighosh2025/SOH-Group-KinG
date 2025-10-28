@@ -12,7 +12,7 @@ interface LoginFormData {
 interface SignupFormData {
   name: string;
   email: string;
-  phone: string;
+  mobile: number;
   password: string;
 }
 
@@ -32,7 +32,7 @@ export default function Login() {
   const [signupData, setSignupData] = useState<SignupFormData>({
     name: '',
     email: '',
-    phone: '',
+    mobile: 0,
     password: '',
   });
 
@@ -60,8 +60,16 @@ export default function Login() {
     setError('');
     setIsLoading(true);
     
+    // Validate mobile number
+    const mobileStr = signupData.mobile.toString();
+    if (!/^\d{10}$/.test(mobileStr) || signupData.mobile === 0) {
+      setError('Mobile number must be exactly 10 digits');
+      setIsLoading(false);
+      return;
+    }
+    
     try {
-      const success = await signup(signupData.name, signupData.email, signupData.phone, signupData.password);
+      const success = await signup(signupData.name, signupData.email, signupData.mobile, signupData.password);
       if (success) {
         navigate('/');
       } else {
@@ -78,7 +86,7 @@ export default function Login() {
     setIsLogin(!isLogin);
     setError('');
     setLoginData({ email: '', password: '' });
-    setSignupData({ name: '', email: '', phone: '', password: '' });
+    setSignupData({ name: '', email: '', mobile: 0, password: '' });
   };
 
   return (
@@ -194,16 +202,22 @@ export default function Login() {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Phone Number
+                  Mobile Number
                 </label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
                   <input
                     type="tel"
-                    value={signupData.phone}
-                    onChange={(e) => setSignupData({ ...signupData, phone: e.target.value })}
+                    value={signupData.mobile}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                      if (value.length <= 10) {
+                        setSignupData({ ...signupData, mobile: parseInt(value) || 0 });
+                      }
+                    }}
                     className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300"
-                    placeholder="Enter your phone number"
+                    placeholder="Enter 10-digit mobile number"
+                    maxLength={10}
                     required
                   />
                 </div>
