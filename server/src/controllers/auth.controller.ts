@@ -64,7 +64,9 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     // Generate JWT token
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
-      res.status(500).json({ message: 'Server configuration error' });
+      console.error('JWT_SECRET is missing from environment variables');
+      console.error('Available env vars:', Object.keys(process.env).filter(key => key.includes('JWT') || key.includes('SECRET')));
+      res.status(500).json({ message: 'Server configuration error: JWT_SECRET not found' });
       return;
     }
 
@@ -84,7 +86,11 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     });
   } catch (error) {
     console.error('Signup error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    // If it's a database error but user might be created, provide helpful message
+    if (error instanceof Error) {
+      console.error('Error details:', error.message, error.stack);
+    }
+    res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : 'Unknown error' });
   }
 };
 
@@ -119,7 +125,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     // Generate JWT token
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
-      res.status(500).json({ message: 'Server configuration error' });
+      console.error('JWT_SECRET is missing from environment variables');
+      res.status(500).json({ message: 'Server configuration error: JWT_SECRET not found' });
       return;
     }
 

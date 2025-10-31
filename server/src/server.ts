@@ -30,4 +30,15 @@ app.use('/api/auth', authRoutes);
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  // Verify environment variables are loaded
+  if (!process.env.JWT_SECRET) {
+    console.error('⚠️  WARNING: JWT_SECRET is not set in environment variables!');
+  } else {
+    console.log('✅ JWT_SECRET loaded successfully');
+  }
+  if (!process.env.DATABASE_URL) {
+    console.error('⚠️  WARNING: DATABASE_URL is not set in environment variables!');
+  } else {
+    console.log('✅ DATABASE_URL loaded successfully');
+  }
 });
