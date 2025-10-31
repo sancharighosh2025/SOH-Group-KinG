@@ -1,5 +1,15 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+const baseURL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+axios.defaults.baseURL = baseURL;
+
+// Log baseURL for debugging (only in development)
+if (import.meta.env.DEV) {
+  console.log('Auth API baseURL:', baseURL);
+}
 
 interface User {
   id: string;
@@ -66,7 +76,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
+          const response = await fetch(`${baseURL}/api/auth/profile`, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
@@ -96,7 +106,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     dispatch({ type: 'SET_LOADING', payload: true });
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
+      const response = await fetch(`${baseURL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -104,20 +114,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        dispatch({ type: 'LOGIN', payload: data.user });
-        return true;
-      } else {
-        console.error('Login failed:', data.message);
+      if (!response.ok) {
+        let errorMessage = 'Login failed. Please try again.';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch {
+          errorMessage = `Server error: ${response.status} ${response.statusText}`;
+        }
+        console.error('Login failed:', errorMessage);
         dispatch({ type: 'SET_LOADING', payload: false });
         return false;
       }
+
+      const data = await response.json();
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      dispatch({ type: 'LOGIN', payload: data.user });
+      return true;
     } catch (error) {
       console.error('Login error:', error);
+      const errorMessage = error instanceof Error 
+        ? `Network error: ${error.message}. Make sure the server is running at ${baseURL}`
+        : 'Login failed. Please check your connection and try again.';
+      console.error(errorMessage);
       dispatch({ type: 'SET_LOADING', payload: false });
       return false;
     }
@@ -127,7 +148,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     dispatch({ type: 'SET_LOADING', payload: true });
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, {
+      const response = await fetch(`${baseURL}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -135,20 +156,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         body: JSON.stringify({ name, email, mobile, password }),
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        dispatch({ type: 'LOGIN', payload: data.user });
-        return true;
-      } else {
-        console.error('Signup failed:', data.message);
+      if (!response.ok) {
+        let errorMessage = 'Signup failed. Please try again.';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch {
+          errorMessage = `Server error: ${response.status} ${response.statusText}`;
+        }
+        console.error('Signup failed:', errorMessage);
         dispatch({ type: 'SET_LOADING', payload: false });
         return false;
       }
+
+      const data = await response.json();
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      dispatch({ type: 'LOGIN', payload: data.user });
+      return true;
     } catch (error) {
       console.error('Signup error:', error);
+      const errorMessage = error instanceof Error 
+        ? `Network error: ${error.message}. Make sure the server is running at ${baseURL}`
+        : 'Signup failed. Please check your connection and try again.';
+      console.error(errorMessage);
       dispatch({ type: 'SET_LOADING', payload: false });
       return false;
     }
@@ -159,7 +191,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // Call logout endpoint
       const token = localStorage.getItem('token');
       if (token) {
-        await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`, {
+        await fetch(`${baseURL}/api/auth/logout`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
