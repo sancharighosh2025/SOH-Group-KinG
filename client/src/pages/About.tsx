@@ -41,6 +41,18 @@ export default function About() {
   const [errors, setErrors] = React.useState<Record<string, string>>({})
   const [status, setStatus] = React.useState<'idle' | 'sending' | 'sent'>('idle')
 
+  // Scroll to contact form if hash is present
+  React.useEffect(() => {
+    if (window.location.hash === '#contact') {
+      setTimeout(() => {
+        const element = document.getElementById('contact')
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
+    }
+  }, [])
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setForm((p) => ({ ...p, [name]: value }))
@@ -197,7 +209,7 @@ export default function About() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 bg-white">
+      <section id="contact" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-slate-100 text-slate-700 text-sm font-medium mb-6">

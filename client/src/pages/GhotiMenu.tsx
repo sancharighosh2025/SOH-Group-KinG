@@ -144,12 +144,16 @@ export default function GhotiMenu() {
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <Button size="lg" className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                      Book This Package <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                    <Button size="lg" variant="outline" className="border-2 border-slate-200 hover:border-slate-300 px-8 py-4 text-lg font-semibold rounded-xl">
-                      Customize Menu
-                    </Button>
+                    <Link to="/about#contact">
+                      <Button size="lg" className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        Book This Package <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </Link>
+                    <Link to="/about#contact">
+                      <Button size="lg" variant="outline" className="border-2 border-slate-200 hover:border-slate-300 px-8 py-4 text-lg font-semibold rounded-xl">
+                        Customize Menu
+                      </Button>
+                    </Link>
                   </div>
                 </div>
                 

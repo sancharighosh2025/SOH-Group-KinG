@@ -16,6 +16,26 @@ model User {
   mobile     String
   password   String
   created_at DateTime @default(now())
+  cartItems  CartItem[]
 
   @@map("users")
+}
+
+model CartItem {
+  id         String   @id @default(cuid())
+  userId     String
+  itemId     String
+  name       String
+  price      Float
+  quantity   Int      @default(1)
+  category   String
+  about      String?
+  img        String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId])
+  @@map("cart_items")
 }

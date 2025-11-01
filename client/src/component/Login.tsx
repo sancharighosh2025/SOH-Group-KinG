@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { useAuth } from '../contexts/AuthContext';
 import { X, Eye, EyeOff, User, Mail, Phone, Lock } from 'lucide-react';
@@ -17,12 +17,36 @@ interface SignupFormData {
 }
 
 export default function Login() {
-  const { login, signup, state } = useAuth();
+  const { login, signup, state: authState } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  // Get redirect path from location state
+  // If no state, try to get from search params or default to home
+  const locationState = location.state as any;
+  let from = locationState?.from || new URLSearchParams(location.search).get('from') || null;
+  const message = locationState?.message;
+  
+  // Store from path in a ref to persist across re-renders
+  const fromRef = useRef<string | null>(from);
+  useEffect(() => {
+    if (from) {
+      fromRef.current = from;
+    }
+  }, [from]);
+  
+  // Show message if passed from previous page
+  useEffect(() => {
+    if (message) {
+      setError(message);
+      // Clear message after showing
+      setTimeout(() => setError(''), 5000);
+    }
+  }, [message]);
   
   const [loginData, setLoginData] = useState<LoginFormData>({
     email: '',
@@ -44,7 +68,8 @@ export default function Login() {
     try {
       const success = await login(loginData.email, loginData.password);
       if (success) {
-        navigate('/');
+        // Redirect to the page user came from, or home
+        navigate(from, { replace: true });
       } else {
         setError('Invalid email or password');
       }
@@ -71,7 +96,8 @@ export default function Login() {
     try {
       const success = await signup(signupData.name, signupData.email, signupData.mobile, signupData.password);
       if (success) {
-        navigate('/');
+        // Redirect to the page user came from, or home
+        navigate(from, { replace: true });
       } else {
         setError('Registration failed. Please try again.');
       }
@@ -100,8 +126,46 @@ export default function Login() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => window.history.back()}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Use the ref value which persists the original 'from' path
+                const storedFrom = fromRef.current || from;
+                
+                // Determine target path - prioritize stored 'from' value
+                let targetPath: string | null = null;
+                
+                if (storedFrom && storedFrom !== '/login' && storedFrom !== location.pathname) {
+                  // If target is cart or other protected routes and user isn't authenticated,
+                  // redirect to home instead to avoid redirect loops
+                  const protectedRoutes = ['/cart'];
+                  
+                  if (protectedRoutes.includes(storedFrom) && !authState.isAuthenticated) {
+                    // Go to home instead of protected route to avoid redirect loop
+                    targetPath = '/';
+                  } else {
+                    targetPath = storedFrom;
+                  }
+                }
+                
+                if (targetPath) {
+                  // Navigate to the target path
+                  navigate(targetPath);
+                } else {
+                  // If no stored path, go back in history
+                  // Try going back 2 steps first (to skip login redirect), then 1 step, then home
+                  if (window.history.length > 2) {
+                    navigate(-2);
+                  } else if (window.history.length > 1) {
+                    navigate(-1);
+                  } else {
+                    navigate('/');
+                  }
+                }
+              }}
               className="text-slate-500 hover:text-slate-700"
+              title="Close and go back"
             >
               <X className="h-5 w-5" />
             </Button>

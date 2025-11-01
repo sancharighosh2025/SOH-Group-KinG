@@ -1,12 +1,28 @@
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import type { CartItem } from '../types/cart';
 
 export const useCartActions = () => {
+  const navigate = useNavigate();
+  const { state: authState } = useAuth();
   const { state, addItem, removeItem, updateQuantity, clearCart } = useCart();
   const { addToast } = useToast();
 
   const addItemWithToast = (item: Omit<CartItem, 'quantity'>) => {
+    // Check if user is authenticated
+    if (!authState.isAuthenticated || authState.isLoading) {
+      addToast({
+        type: 'warning',
+        title: 'Login Required',
+        message: 'Please login to add items to cart',
+        duration: 3000,
+      });
+      navigate('/login', { state: { from: window.location.pathname, message: 'Please login to add items to cart' } });
+      return;
+    }
+
     const existingItem = state.items.find(cartItem => cartItem.id === item.id);
     
     if (existingItem) {
@@ -39,6 +55,18 @@ export const useCartActions = () => {
   };
 
   const updateQuantityWithToast = (id: string, quantity: number, itemName: string) => {
+    // Check if user is authenticated
+    if (!authState.isAuthenticated || authState.isLoading) {
+      addToast({
+        type: 'warning',
+        title: 'Login Required',
+        message: 'Please login to update cart',
+        duration: 3000,
+      });
+      navigate('/login', { state: { from: window.location.pathname } });
+      return;
+    }
+
     if (quantity <= 0) {
       removeItemWithToast(id, itemName);
     } else {

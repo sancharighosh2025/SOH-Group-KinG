@@ -3,6 +3,7 @@ import 'dotenv/config';
 import cookieParser from "cookie-parser";
 import cors from 'cors';
 import authRoutes from './routes/auth.routes.js';
+import cartRoutes from './routes/cart.routes.js';
 
 const app = express();
 
@@ -26,6 +27,9 @@ app.get("/", (req, res) => {
 
 // Authentication routes
 app.use('/api/auth', authRoutes);
+
+// Cart routes
+app.use('/api/cart', cartRoutes);
 
 // Start server
 app.listen(PORT, () => {

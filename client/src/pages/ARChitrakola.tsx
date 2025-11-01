@@ -27,6 +27,8 @@ export default function OrchidGallery() {
   const runningRef1 = React.useRef(true)
   const runningRef2 = React.useRef(true)
   const speedRef = React.useRef(0.6) // px per frame at ~60fps; tune for faster/slower
+  
+  const [showMoreWork, setShowMoreWork] = React.useState(false)
 
   const ALL_PHOTOS: Photo[] = React.useMemo(
     () => [
@@ -265,6 +267,40 @@ export default function OrchidGallery() {
     </div>
   )
 
+  // Additional skeleton components for second grid
+  const SkeletonNine = () => (
+    <div>
+      <p className="font-bold md:text-4xl text-xl text-white">Fine Art Photography</p>
+      <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
+        Creating artistic masterpieces that blend technical excellence with creative vision and emotional depth.
+      </p>
+    </div>
+  )
+  const SkeletonTen = () => (
+    <div>
+      <p className="font-bold md:text-4xl text-xl text-white">Cinematic Storytelling</p>
+      <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
+        Bringing cinematic aesthetics to still photography with dramatic lighting and narrative composition.
+      </p>
+    </div>
+  )
+  const SkeletonEleven = () => (
+    <div>
+      <p className="font-bold md:text-4xl text-xl text-white">Documentary Style</p>
+      <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
+        Authentic documentary photography that captures real moments and genuine emotions naturally.
+      </p>
+    </div>
+  )
+  const SkeletonTwelve = () => (
+    <div>
+      <p className="font-bold md:text-4xl text-xl text-white">Studio Sessions</p>
+      <p className="font-normal text-base my-4 max-w-lg text-neutral-200">
+        Professional studio photography with controlled lighting and perfect composition for stunning results.
+      </p>
+    </div>
+  )
+
   const cardsTop = [
     { id: 1, content: <SkeletonOne />, className: 'md:col-span-2', thumbnail: 'AR/imageAR26.jpg' },
     { id: 2, content: <SkeletonTwo />, className: 'col-span-1', thumbnail: 'AR/imageAR24.jpg' },
@@ -276,14 +312,14 @@ export default function OrchidGallery() {
     { id: 8, content: <SkeletonEight />, className: 'col-span-1', thumbnail: 'AR/imageAR(35).webp' },
   ]
   const cardsBottom = [
-    { id: 1, content: <SkeletonOne />, className: 'md:col-span-2', thumbnail: 'AR/imageAR26.jpg' },
-    { id: 2, content: <SkeletonTwo />, className: 'col-span-1', thumbnail: 'AR/imageAR24.jpg' },
-    { id: 3, content: <SkeletonThree />, className: 'col-span-1', thumbnail: 'AR/imageAR(36).webp' },
-    { id: 4, content: <SkeletonFour />, className: 'md:col-span-2', thumbnail: 'AR/imageAR30.jpg' },
-    { id: 5, content: <SkeletonFive />, className: 'col-span-1', thumbnail: 'AR/imageAR28.jpg' },
-    { id: 6, content: <SkeletonSix />, className: 'col-span-1', thumbnail: 'AR/imageAR14.jpg' },
-    { id: 7, content: <SkeletonSeven />, className: 'md:col-span-2', thumbnail: 'AR/imageAR29.jpg' },
-    { id: 8, content: <SkeletonEight />, className: 'col-span-1', thumbnail: 'AR/imageAR(35).webp' },
+    { id: 9, content: <SkeletonNine />, className: 'md:col-span-2', thumbnail: 'AR/imageAR25.jpg' },
+    { id: 10, content: <SkeletonTen />, className: 'col-span-1', thumbnail: 'AR/imageAR27.jpg' },
+    { id: 11, content: <SkeletonEleven />, className: 'col-span-1', thumbnail: 'AR/imageAR33.jpg' },
+    { id: 12, content: <SkeletonTwelve />, className: 'md:col-span-2', thumbnail: 'AR/imageAR31.jpg' },
+    { id: 13, content: <SkeletonOne />, className: 'col-span-1', thumbnail: 'AR/imageAR1.jpg' },
+    { id: 14, content: <SkeletonTwo />, className: 'col-span-1', thumbnail: 'AR/imageAR11.jpg' },
+    { id: 15, content: <SkeletonThree />, className: 'md:col-span-2', thumbnail: 'AR/imageAR32.jpg' },
+    { id: 16, content: <SkeletonFour />, className: 'col-span-1', thumbnail: 'AR/imageAR(34).webp' },
   ]
 
   return (
@@ -413,13 +449,13 @@ export default function OrchidGallery() {
             </p>
           </div>
 
-          {/* LayoutGrid BEFORE the strips - Hidden on mobile for better performance */}
-          <div className="hidden lg:block h-[60vh] w-full mb-140">
+          {/* First LayoutGrid - Always visible on desktop */}
+          <div className="hidden lg:block h-[60vh] w-full mb-8 lg:mb-12">
             <LayoutGrid cards={cardsTop} />
           </div>
 
           {/* Mobile Gallery Grid - Show on mobile instead of LayoutGrid */}
-          <div className="lg:hidden grid grid-cols-2 gap-4 mb-12">
+          <div className="lg:hidden grid grid-cols-2 gap-4 ">
             {ALL_PHOTOS.slice(0, 8).map((photo, idx) => (
               <div
                 key={`mobile-${photo.id}-${idx}`}
@@ -435,8 +471,47 @@ export default function OrchidGallery() {
             ))}
           </div>
 
+          {/* Button to show more work - Visible on all screens, positioned after first gallery */}
+          {!showMoreWork && (
+            <div className="flex justify-center mb-8 lg:mb-12 mt-6 lg:mt-8 w-full">
+              <Button 
+                onClick={() => setShowMoreWork(true)}
+                size="lg"
+                className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 text-base lg:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 z-10"
+              >
+                View More Work <ArrowRight className="ml-2 h-4 w-4 lg:h-5 lg:w-5" />
+              </Button>
+            </div>
+          )}
+
+          {/* Second LayoutGrid - Shown when button is clicked (Desktop only) */}
+          {showMoreWork && (
+            <div className="hidden lg:block h-[60vh] w-full mb-8 lg:mb-20 mt-110">
+              <LayoutGrid cards={cardsBottom} />
+            </div>
+          )}
+
+          {/* Additional Mobile Gallery - Shown when button is clicked */}
+          {showMoreWork && (
+            <div className="lg:hidden grid grid-cols-2 gap-4 mb-8">
+              {ALL_PHOTOS.slice(8, 16).map((photo, idx) => (
+                <div
+                  key={`mobile-more-${photo.id}-${idx}`}
+                  className="group relative aspect-square overflow-hidden rounded-xl bg-white shadow-lg border border-slate-200"
+                >
+                  <img 
+                    src={photo.src} 
+                    alt={photo.alt ?? 'Work'} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Auto-scrolling Gallery Strip - Left to Right */}
-          <div className="space-y-6 lg:space-y-9 mb-8 lg:mb-10">
+          <div className="space-y-6 lg:space-y-9 mb-8 lg:mb-10 mt-8 lg:mt-130">
             <div
               ref={stripRef1}
               className="relative w-full overflow-x-auto whitespace-nowrap select-none no-scrollbar"
